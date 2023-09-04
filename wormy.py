@@ -6,8 +6,8 @@ from pygame.locals import *
 path=r"d:\python书籍文档\makinggames"
 os.chdir(path)
 
-FPS=15
-FPS1=30
+FPS=15  #游戏进行中，贪吃蛇的运行速度
+FPS1=30 #开始画面，文字WORMY旋转的速度
 WINDOWWIDTH=640
 WINDOWHEIGHT=480
 CELLSIZE=20
