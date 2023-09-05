@@ -10,7 +10,7 @@ FPS=15  #游戏进行中，贪吃蛇的运行速度
 FPS1=30 #开始画面，文字WORMY旋转的速度
 WINDOWWIDTH=640
 WINDOWHEIGHT=480
-CELLSIZE=20
+CELLSIZE=20 #每个格子的尺寸
 assert WINDOWWIDTH%2==0,'Window width must be a multiple of cell size.'
 assert WINDOWHEIGHT%2==0,'Window height must be a multiple of cell size.'
 CELLWIDTH=int(WINDOWWIDTH/CELLSIZE)#表示x轴能够容纳的CELL的数量
