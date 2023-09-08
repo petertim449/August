@@ -1,4 +1,13 @@
 # Reversegam: a clone of Othello/Reversi
+'''
+python中@@ -39,48 +53,32 @@代表什么意思?
+在Python中，@@ -39,48 +53,32 @@ 是一个表示代码修改的行的标记。
+这个标记通常用在版本控制系统（如Git）中的diff输出中。
+具体来说，这个标记显示了两个版本之间的差异。在这个标记中，-39表示在旧版本中的第39行发生了变化，
++53表示在新版本中的第53行发生了变化。而32表示在这个修改中有32行的代码被删除。
+这个标记的目的是让开发者更容易理解代码的修改。通过查看这个标记，开发者可以知道在两个版本之间发生了什么样的改变，
+以及具体在哪些行发生了改变。这对于团队协作和代码审查非常有用。
+'''
 import random
 import sys
 WIDTH = 8  # Board is 8 spaces wide
@@ -212,22 +221,12 @@ def playGame(playerTile, computerTile):
 
         elif turn == 'player': # Player's turn
             if playerValidMoves != []:
-                if showHints:
-                    validMovesBoard = getBoardWithValidMoves(board, playerTile) #return boardCopy
-                    drawBoard(validMovesBoard)
-                else:
-                    drawBoard(board)
+                drawBoard(board)
                 printScore(board, playerTile, computerTile)
 
-                move = getPlayerMove(board, playerTile)
-                if move == 'quit':
-                    print('Thanks for playing!')
-                    sys.exit() # Terminate the program.
-                elif move == 'hints':
-                    showHints = not showHints
-                    continue
-                else:
-                    makeMove(board, playerTile, move[0], move[1])
+                input('Press Enter to see the computer\'s move.')
+                move = getComputerMove(board, playerTile)
+                makeMove(board, playerTile, move[0], move[1])
             turn = 'computer'
 
         elif turn == 'computer': # Computer's turn
