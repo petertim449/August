@@ -26,11 +26,25 @@ def getNewBoard():
     board[4][3] = 'O'
     board[4][4] = 'X'
     return board
+def getBoardWithValidMoves(board, tile):
+    # Returns a new board with periods marking the valid moves the player can make.
+    boardCopy = getBoardCopy(board)
 
+    for x, y in getValidMoves(boardCopy, tile):
+        boardCopy[x][y] = '.'
+    return boardCopy
+def getValidMoves(board, tile): #获取玩家或者计算机的有效棋步
+    # Returns a list of [x,y] lists of valid moves for the given player on the given board.
+    validMoves = []
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            if isValidMove(board, tile, x, y) != False: #遍历所有空格
+                validMoves.append([x, y])
+    return validMoves
 def isValidMove(board, tile, xstart, ystart):
     # Returns False if the player's move on space xstart, ystart is invalid.
     # If it is a valid move, returns a list of spaces that would become the player's if they made a move here.
-    if board[xstart][ystart] != ' ' or not isOnBoard(xstart, ystart):
+    if board[xstart][ystart] != ' ' or not isOnBoard(xstart, ystart): #遍历所有的空格
         return False
 
     if tile == 'X':
@@ -39,47 +53,31 @@ def isValidMove(board, tile, xstart, ystart):
         otherTile = 'X'
 
     tilesToFlip = []
-    for xdirection, ydirection in [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]:
+    for xdirection, ydirection in [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]:#遍历空格周围的8个位置
         x, y = xstart, ystart
         x += xdirection # First step in the x direction
         y += ydirection # First step in the y direction
-        while isOnBoard(x, y) and board[x][y] == otherTile:
+        while isOnBoard(x, y) and board[x][y] == otherTile:#紧临空格的必须为对手牌
             # Keep moving in this x & y direction.
+            #如果紧邻空格的对手拍一直是连续的，则一直递加
             x += xdirection
             y += ydirection
             if isOnBoard(x, y) and board[x][y] == tile:
                 # There are pieces to flip over. Go in the reverse direction until we reach the original space, noting all the tiles along the way.
                 while True:
+                    #将自己两个牌之间的对手牌的位置记录在tileToFlip中
                     x -= xdirection
                     y -= ydirection
                     if x == xstart and y == ystart:
-                        break
+                        break #退出本循环while True
                     tilesToFlip.append([x, y])
 
     if len(tilesToFlip) == 0: # If no tiles were flipped, this is not a valid move.
         return False
     return tilesToFlip
-
-def isOnBoard(x, y):
+def isOnBoard(x, y): #最好的棋步为墙角的位置
     # Returns True if the coordinates are located on the board.
     return x >= 0 and x <= WIDTH - 1 and y >= 0 and y <= HEIGHT - 1
-
-def getBoardWithValidMoves(board, tile):
-    # Returns a new board with periods marking the valid moves the player can make.
-    boardCopy = getBoardCopy(board)
-
-    for x, y in getValidMoves(boardCopy, tile):
-        boardCopy[x][y] = '.'
-    return boardCopy
-
-def getValidMoves(board, tile):
-    # Returns a list of [x,y] lists of valid moves for the given player on the given board.
-    validMoves = []
-    for x in range(WIDTH):
-        for y in range(HEIGHT):
-            if isValidMove(board, tile, x, y) != False:
-                validMoves.append([x, y])
-    return validMoves
 
 def getScoreOfBoard(board):
     # Determine the score by counting the tiles. Returns a dictionary with keys 'X' and 'O'.
@@ -179,7 +177,7 @@ def getComputerMove(board, computerTile):
     bestScore = -1
     for x, y in possibleMoves:
         boardCopy = getBoardCopy(board)
-        makeMove(boardCopy, computerTile, x, y)
+        makeMove(boardCopy, computerTile, x, y) #把每一步validMove都走一遍，来比较最高分，最高分就是最优值
         score = getScoreOfBoard(boardCopy)[computerTile]
         if score > bestScore:
             bestMove = [x, y]
@@ -215,7 +213,7 @@ def playGame(playerTile, computerTile):
         elif turn == 'player': # Player's turn
             if playerValidMoves != []:
                 if showHints:
-                    validMovesBoard = getBoardWithValidMoves(board, playerTile)
+                    validMovesBoard = getBoardWithValidMoves(board, playerTile) #return boardCopy
                     drawBoard(validMovesBoard)
                 else:
                     drawBoard(board)
@@ -267,5 +265,4 @@ def main():
             break
 
 if __name__=='__main__':
-    board=getNewBoard()
-    drawBoard(board)
+    main()
